@@ -1,0 +1,63 @@
+create table PHONES
+(
+	NAME_TYPE VARCHAR2(1) not null
+		constraint CF_PHONES1
+			references REFSOURCE_TYPES,
+	NAME_ID NUMBER(10) not null,
+	PHONE_SEQ NUMBER(2) not null
+		constraint CC_PHONES2
+			check (phone_seq > 0),
+	PHONE_TYPE VARCHAR2(7)
+		constraint CF_PHONES2
+			references PHONE_TYPES,
+	PHONEA VARCHAR2(3)
+		constraint CC_PHONES_TABLE1
+			check (PHONEA between 0 and 999),
+	PHONEB VARCHAR2(3)
+		constraint CC_PHONES_TABLE2
+			check (PHONEB between 0 and 999),
+	PHONEC VARCHAR2(4)
+		constraint CC_PHONES_TABLE3
+			check (PHONEC between 0 and 9999),
+	PHONE_EXT VARCHAR2(4)
+		constraint CC_PHONES_TABLE4
+			check (PHONE_EXT between 0 and 9999),
+	PHONE_COMMENT VARCHAR2(40),
+	ADDR_SEQ NUMBER(5) default 1 not null
+		constraint CC_PHONES1
+			check (addr_seq > 0),
+	PARTNERSHIP_SECURITY_LABEL NUMBER(10),
+	CONTACT_FLAG VARCHAR2(1)
+		constraint PHONES_CONTACT_FLAG_CK
+			check (CONTACT_FLAG IN ('Y','N')),
+	CREATED_BY VARCHAR2(30),
+	CREATION_DATE DATE,
+	UPDATED_BY VARCHAR2(30),
+	UPDATED_DATE DATE,
+	CALL_DAY VARCHAR2(30),
+	CALL_TIME VARCHAR2(50),
+	CALL_TIME_ZONE VARCHAR2(100),
+	UNIQ_ID NUMBER(15)
+		constraint PHONES_UID
+			unique,
+	constraint CP_PHONES1
+		primary key (NAME_TYPE, NAME_ID, ADDR_SEQ, PHONE_SEQ)
+)
+/
+
+create index XPHONES2
+	on PHONES (PHONE_TYPE)
+/
+
+create index PHONES_NDX4
+	on PHONES (PHONEA, PHONEB, PHONEC)
+/
+
+create index PHONES_NDX_AUD1
+	on PHONES (CREATION_DATE)
+/
+
+create index PHONES_NDX_AUD2
+	on PHONES (UPDATED_DATE)
+/
+
